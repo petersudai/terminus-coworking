@@ -1,0 +1,154 @@
+---
+import { IMAGES, img } from "../data/images";
+
+const hours = [
+  { day: "MON–FRI", time: "07:00–22:00" },
+  { day: "SAT", time: "09:00–18:00" },
+  { day: "SUN", time: "CLOSED" },
+];
+---
+
+<section id="location" class="location">
+  <div class="location-media">
+    <img
+      src={img(IMAGES.locationSkyline, 1600, 1300)}
+      alt="Downtown Atlanta's skyline under a clear blue sky."
+      loading="lazy"
+    />
+  </div>
+
+  <div class="location-content">
+    <p class="eyebrow" data-reveal>Find Us</p>
+    <h2 data-reveal>142 Forsyth Street SW</h2>
+    <p class="location-copy" data-reveal>
+      Two blocks from Five Points Station, inside the Fairlie&ndash;Poplar
+      historic district. Look for the brick depot with the clock — the
+      Concourse entrance is under it.
+    </p>
+
+    <div class="location-board" data-reveal>
+      <p class="eyebrow location-board-label">Departure Board — Hours</p>
+      <table>
+        <tbody>
+          {hours.map((h) => (
+            <tr>
+              <td class="location-day">{h.day}</td>
+              <td>
+                <div class="split-flap" data-flap-once={h.time}></div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <a href="https://maps.google.com/?q=142+Forsyth+Street+SW+Atlanta+GA" class="location-link" data-cursor-grow target="_blank" rel="noopener">
+      Get directions ↗
+    </a>
+  </div>
+</section>
+
+<style>
+  .location {
+    background: var(--color-ink);
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .location-media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .location-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.9);
+  }
+
+  .location-content {
+    padding: clamp(2.5rem, 6vw, 5rem) clamp(1.25rem, 4vw, 3rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    justify-content: center;
+  }
+
+  .location-content .eyebrow {
+    color: var(--color-brass);
+  }
+
+  .location-content h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+  }
+
+  .location-copy {
+    max-width: 28rem;
+    color: var(--color-steel);
+    line-height: 1.6;
+  }
+
+  .location-board {
+    background: var(--color-ink-soft);
+    border: 1px solid color-mix(in srgb, var(--color-bone) 12%, transparent);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    max-width: 24rem;
+    margin-top: 0.5rem;
+  }
+
+  .location-board-label {
+    color: var(--color-clay-bright);
+    margin-bottom: 0.9rem;
+    display: block;
+  }
+
+  .location-board table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .location-board td {
+    padding-block: 0.4rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-bone) 8%, transparent);
+  }
+  .location-board tr:first-child td {
+    border-top: none;
+  }
+  .location-day {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-steel);
+  }
+  .location-board .split-flap {
+    font-size: 0.95rem;
+    color: var(--color-bone);
+    justify-content: flex-end;
+    width: 100%;
+  }
+  .location-board td:last-child {
+    text-align: right;
+  }
+
+  .location-link {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-bone);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in srgb, var(--color-bone) 40%, transparent);
+    width: fit-content;
+  }
+
+  @media (min-width: 900px) {
+    .location {
+      grid-template-columns: 1fr 1fr;
+    }
+    .location-media {
+      aspect-ratio: auto;
+    }
+  }
+</style>

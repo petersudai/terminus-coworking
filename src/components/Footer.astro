@@ -1,0 +1,138 @@
+---
+const sitemap = [
+  { href: "#building", label: "The Building" },
+  { href: "#spaces", label: "Spaces" },
+  { href: "#membership", label: "Membership" },
+  { href: "#location", label: "Location" },
+  { href: "#visit", label: "Book a Tour" },
+];
+const social = [
+  { href: "https://instagram.com", label: "Instagram" },
+  { href: "https://linkedin.com", label: "LinkedIn" },
+  { href: "https://x.com", label: "X" },
+];
+---
+
+<footer class="footer">
+  <div class="footer-top">
+    <a href="#top" class="footer-mark" data-cursor-grow>TERMINUS</a>
+    <p class="footer-tagline">A downtown Atlanta workspace. Est. 2026.</p>
+  </div>
+
+  <div class="footer-grid">
+    <div>
+      <p class="eyebrow">Sitemap</p>
+      <ul>
+        {sitemap.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <p class="eyebrow">Visit</p>
+      <ul class="footer-plain">
+        <li>142 Forsyth Street SW</li>
+        <li>Atlanta, GA 30303</li>
+        <li>hello@terminusatl.co</li>
+        <li>(404) 555‑0142</li>
+      </ul>
+    </div>
+    <div>
+      <p class="eyebrow">Follow</p>
+      <ul>
+        {social.map((s) => (
+          <li><a href={s.href} target="_blank" rel="noopener">{s.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; <span data-year></span> Terminus Coworking Co.</p>
+    <p>Built with care in Atlanta.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-ink);
+    border-top: 1px solid color-mix(in srgb, var(--color-bone) 12%, transparent);
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.25rem, 4vw, 3rem) 2rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+
+  .footer-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-bone) 10%, transparent);
+    margin-bottom: 2.5rem;
+  }
+  .footer-mark {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--color-bone);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+  }
+  .footer-tagline {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-steel);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  .footer-grid .eyebrow {
+    color: var(--color-brass);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .footer-grid ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .footer-grid a {
+    color: var(--color-bone);
+    text-decoration: none;
+    opacity: 0.8;
+  }
+  .footer-grid a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+  .footer-plain li {
+    color: var(--color-steel);
+    font-size: 0.92rem;
+  }
+
+  .footer-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--color-steel);
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-bone) 10%, transparent);
+  }
+
+  @media (min-width: 700px) {
+    .footer-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .footer-bottom {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>

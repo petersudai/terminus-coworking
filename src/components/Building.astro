@@ -1,0 +1,143 @@
+---
+import { IMAGES, img } from "../data/images";
+
+const frames = [
+  {
+    src: img(IMAGES.buildingDome, 1400, 1750),
+    alt: "A restored glass-domed ceiling flooding the Concourse with daylight.",
+    cap: "The Concourse ceiling — original 1921 glazing, restored",
+  },
+  {
+    src: img(IMAGES.buildingExterior, 1400, 1750),
+    alt: "The building's brick and concrete exterior against a clear sky.",
+    cap: "South facade, Forsyth Street entrance",
+  },
+  {
+    src: img(IMAGES.buildingDetail2, 1400, 1750),
+    alt: "A painted blue door set into the original brick wall.",
+    cap: "The old freight door, now the Studios entrance",
+  },
+  {
+    src: img(IMAGES.buildingDetail3, 1400, 1750),
+    alt: "Brick facade detail with tall windows and a clock.",
+    cap: "The depot clock — still keeps time",
+  },
+  {
+    src: img(IMAGES.buildingDetail1, 1400, 1750),
+    alt: "A desk positioned beside a large window with a globe on it.",
+    cap: "Window desks along the old loading platform",
+  },
+];
+---
+
+<section id="building" class="building" data-h-section>
+  <div class="building-intro">
+    <p class="eyebrow" data-reveal>The Building</p>
+    <h2 class="building-heading" data-reveal>
+      Built in 1921 to move freight.<br />
+      Restored to move ideas.
+    </h2>
+  </div>
+
+  <div class="building-track-viewport">
+    <div class="building-track" data-h-track>
+      {frames.map((f, i) => (
+        <figure class="building-frame">
+          <span class="eyebrow building-frame-index">0{i + 1}</span>
+          <img src={f.src} alt={f.alt} loading="lazy" />
+          <figcaption>{f.cap}</figcaption>
+        </figure>
+      ))}
+      <div class="building-frame building-frame--end">
+        <p class="eyebrow">Next</p>
+        <p class="building-frame-end-text">The Spaces&nbsp;→</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .building {
+    background: var(--color-ink);
+    padding-top: clamp(4rem, 10vw, 7rem);
+  }
+
+  .building-intro {
+    max-width: 88rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .building-intro .eyebrow {
+    color: var(--color-brass);
+    margin-bottom: 1.25rem;
+  }
+
+  .building-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    line-height: 1.15;
+    max-width: 40rem;
+  }
+
+  .building-track-viewport {
+    overflow: hidden;
+    padding-bottom: clamp(4rem, 10vw, 7rem);
+  }
+
+  .building-track {
+    display: flex;
+    gap: clamp(1rem, 2.5vw, 2rem);
+    padding-inline: clamp(1.25rem, 4vw, 3rem);
+    width: max-content;
+  }
+
+  .building-frame {
+    position: relative;
+    width: min(78vw, 24rem);
+    flex-shrink: 0;
+  }
+
+  .building-frame img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .building-frame-index {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    z-index: 1;
+    color: var(--color-bone);
+    background: color-mix(in srgb, var(--color-ink) 55%, transparent);
+    backdrop-filter: blur(4px);
+    padding: 0.25rem 0.55rem;
+    border-radius: 999px;
+  }
+
+  .building-frame figcaption {
+    margin-top: 0.9rem;
+    font-size: 0.92rem;
+    color: var(--color-steel);
+    max-width: 22rem;
+  }
+
+  .building-frame--end {
+    width: min(60vw, 16rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .building-frame--end .eyebrow {
+    color: var(--color-brass);
+  }
+  .building-frame-end-text {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+  }
+</style>

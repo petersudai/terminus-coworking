@@ -1,0 +1,191 @@
+---
+import { IMAGES, img } from "../data/images";
+
+const spaces = [
+  {
+    n: "01",
+    name: "The Concourse",
+    tag: "Open desks",
+    desc: "Communal tables and hot desks under the original glass roof. Day passes and flexible memberships. Come as you are.",
+    src: img(IMAGES.spaceConcourse, 1200, 900),
+    alt: "An open-plan coworking floor with people at desks and laptops.",
+    size: "lg",
+  },
+  {
+    n: "02",
+    name: "The Platform",
+    tag: "Lounge & café",
+    desc: "The social floor — espresso by morning, readings and listening sessions after dark.",
+    src: img(IMAGES.spacePlatform, 900, 1100),
+    alt: "Members gathered around a long wooden counter in a café-style lounge.",
+    size: "md",
+  },
+  {
+    n: "03",
+    name: "The Gates",
+    tag: "Focus pods",
+    desc: "Six soundproofed booths for calls that can't wait and focus that can't be interrupted.",
+    src: img(IMAGES.spaceGates, 900, 1100),
+    alt: "A minimal, enclosed seating nook against a black and white wall.",
+    size: "md",
+  },
+  {
+    n: "04",
+    name: "The Studios",
+    tag: "Private offices",
+    desc: "Lockable studios for teams of two to twelve, each with its own light and view.",
+    src: img(IMAGES.spaceStudios, 900, 1100),
+    alt: "An empty private office with a long table and chairs.",
+    size: "md",
+  },
+  {
+    n: "05",
+    name: "Departures",
+    tag: "Meeting rooms",
+    desc: "Four rooms booked by the hour, named for the rail lines that once ran through here.",
+    src: img(IMAGES.spaceDepartures, 900, 1100),
+    alt: "A meeting room with an oval conference table and chairs.",
+    size: "md",
+  },
+];
+---
+
+<section id="spaces" class="spaces">
+  <div class="spaces-head">
+    <p class="eyebrow" data-reveal>The Spaces</p>
+    <h2 data-reveal>Five ways to work under one roof.</h2>
+  </div>
+
+  <div class="spaces-grid" data-reveal-group>
+    {spaces.map((s) => (
+      <article class={`space-card space-card--${s.size}`} data-reveal-item>
+        <div class="space-card-media">
+          <img src={s.src} alt={s.alt} loading="lazy" />
+        </div>
+        <div class="space-card-body">
+          <div class="space-card-top">
+            <span class="eyebrow">{s.n}</span>
+            <span class="eyebrow space-card-tag">{s.tag}</span>
+          </div>
+          <h3>{s.name}</h3>
+          <p>{s.desc}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .spaces {
+    background: var(--color-ink);
+    padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .spaces-head {
+    max-width: 88rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+  .spaces-head .eyebrow {
+    color: var(--color-brass);
+    margin-bottom: 1.25rem;
+  }
+  .spaces-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    max-width: 34rem;
+  }
+
+  .spaces-grid {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .space-card {
+    background: var(--color-ink-soft);
+    border: 1px solid color-mix(in srgb, var(--color-bone) 10%, transparent);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s ease;
+  }
+  .space-card:hover {
+    border-color: color-mix(in srgb, var(--color-clay-bright) 60%, transparent);
+  }
+
+  .space-card-media {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+  .space-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .space-card:hover .space-card-media img {
+    transform: scale(1.05);
+  }
+
+  .space-card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+
+  .space-card-top {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-steel);
+  }
+  .space-card-tag {
+    color: var(--color-clay-bright);
+  }
+
+  .space-card-body h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--color-bone);
+  }
+
+  .space-card-body p {
+    color: var(--color-steel);
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 720px) {
+    .spaces-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .spaces-grid {
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-rows: 1fr;
+    }
+    .space-card--lg {
+      grid-column: span 3;
+      grid-row: span 2;
+    }
+    .space-card--lg .space-card-media {
+      aspect-ratio: auto;
+      height: 60%;
+    }
+    .space-card--md {
+      grid-column: span 3;
+    }
+    .space-card--md:nth-of-type(2) {
+      grid-column: span 3;
+    }
+  }
+</style>

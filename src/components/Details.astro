@@ -1,0 +1,86 @@
+---
+import { IMAGES, img } from "../data/images";
+
+const items = [
+  { src: img(IMAGES.gallery1, 700, 900), alt: "A laptop open on a wooden desk.", cap: "Real desks, not hot-desk hexagons" },
+  { src: img(IMAGES.gallery6, 700, 500), alt: "A wall of dark lockers.", cap: "A locker with your name on it" },
+  { src: img(IMAGES.gallery2, 700, 900), alt: "Potted plants on a wooden table.", cap: "Plants that outlive the lease" },
+  { src: img(IMAGES.gallery5, 700, 500), alt: "Two vacant orange chairs.", cap: "Color, where it earns its keep" },
+];
+---
+
+<section class="details">
+  <div class="details-head">
+    <p class="eyebrow" data-reveal>The Details</p>
+    <p class="details-line" data-reveal>The small stuff, sorted.</p>
+  </div>
+
+  <div class="details-row" data-reveal-group>
+    {items.map((it) => (
+      <figure class="details-item" data-reveal-item>
+        <img src={it.src} alt={it.alt} loading="lazy" />
+        <figcaption>{it.cap}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .details {
+    background: var(--color-ink);
+    padding: 0 clamp(1.25rem, 4vw, 3rem) clamp(4rem, 10vw, 7rem);
+  }
+
+  .details-head {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    flex-wrap: wrap;
+  }
+  .details-head .eyebrow {
+    color: var(--color-brass);
+  }
+  .details-line {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--color-steel);
+  }
+
+  .details-row {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .details-item img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+  .details-item:nth-child(2n) img,
+  .details-item:nth-child(4) img {
+    aspect-ratio: 4 / 3;
+  }
+  .details-item figcaption {
+    margin-top: 0.65rem;
+    font-size: 0.85rem;
+    color: var(--color-steel);
+  }
+
+  @media (min-width: 800px) {
+    .details-row {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .details-item:nth-child(2),
+    .details-item:nth-child(4) {
+      margin-top: 2rem;
+    }
+  }
+</style>

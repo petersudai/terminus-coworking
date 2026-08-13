@@ -1,0 +1,255 @@
+---
+const links = [
+  { href: "#building", label: "The Building" },
+  { href: "#spaces", label: "Spaces" },
+  { href: "#membership", label: "Membership" },
+  { href: "#location", label: "Location" },
+];
+---
+
+<header data-nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-mark" data-cursor-grow>
+      <span class="nav-mark-glyph">T</span>
+      <span class="nav-mark-word">TERMINUS</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Primary">
+      {links.map((l) => (
+        <a href={l.href} data-cursor-grow>{l.label}</a>
+      ))}
+    </nav>
+
+    <a href="#visit" class="nav-cta" data-cursor-grow data-magnetic>
+      Book a Tour
+    </a>
+
+    <button
+      type="button"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-label="Toggle menu"
+      class="nav-toggle"
+    >
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</header>
+
+<div data-nav-overlay class="nav-overlay">
+  <div class="nav-overlay-inner">
+    <ol>
+      {links.map((l, i) => (
+        <li>
+          <span class="eyebrow nav-overlay-index">0{i + 1}</span>
+          <a href={l.href}>{l.label}</a>
+        </li>
+      ))}
+      <li>
+        <span class="eyebrow nav-overlay-index">0{links.length + 1}</span>
+        <a href="#visit">Book a Tour</a>
+      </li>
+    </ol>
+
+    <div class="nav-overlay-footer">
+      <div>
+        <p class="eyebrow">Address</p>
+        <p>142 Forsyth Street SW, Atlanta, GA</p>
+      </div>
+      <div>
+        <p class="eyebrow">Contact</p>
+        <p>hello@terminusatl.co &middot; (404) 555‑0142</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    inset-inline: 0;
+    z-index: 60;
+    padding: 1.5rem clamp(1.25rem, 4vw, 3rem);
+    transition: padding 0.4s ease, background-color 0.4s ease, backdrop-filter 0.4s ease;
+  }
+
+  .nav.is-scrolled {
+    padding-block: 0.85rem;
+    background: color-mix(in srgb, var(--color-ink) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-bone) 10%, transparent);
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+
+  .nav-mark {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    color: var(--color-bone);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-mark-glyph {
+    display: none;
+  }
+  .nav-mark-word {
+    font-size: 1.15rem;
+    font-weight: 500;
+  }
+
+  .nav-links {
+    display: none;
+    align-items: center;
+    gap: 2.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .nav-links a {
+    color: var(--color-bone);
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s ease;
+  }
+  .nav-links a:hover {
+    opacity: 1;
+  }
+
+  .nav-cta {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink);
+    background: var(--color-bone);
+    padding: 0.7rem 1.3rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+
+  .nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 70;
+  }
+  .nav-toggle span {
+    display: block;
+    height: 1.5px;
+    background: var(--color-bone);
+    transition: transform 0.35s ease, opacity 0.35s ease;
+  }
+  .nav-toggle.is-open span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+  .nav-toggle.is-open span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  @media (min-width: 900px) {
+    .nav-links {
+      display: flex;
+    }
+    .nav-cta {
+      display: inline-block;
+    }
+    .nav-mark-glyph {
+      display: none;
+    }
+    .nav-toggle {
+      display: none;
+    }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 55;
+    background: var(--color-ink-soft);
+    display: flex;
+    align-items: flex-end;
+    padding: clamp(1.5rem, 6vw, 5rem);
+    padding-top: 7rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.83, 0, 0.17, 1), opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .nav-overlay.is-open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-overlay-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .nav-overlay ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .nav-overlay li {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-bone) 15%, transparent);
+    padding-block: 0.6rem;
+  }
+  .nav-overlay li:last-child {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-bone) 15%, transparent);
+  }
+
+  .nav-overlay-index {
+    color: var(--color-clay-bright);
+  }
+
+  .nav-overlay a {
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 7vw, 5rem);
+    font-weight: 400;
+    color: var(--color-bone);
+    text-decoration: none;
+    line-height: 1.1;
+  }
+
+  .nav-overlay-footer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-steel);
+    max-width: 40rem;
+  }
+  .nav-overlay-footer p:first-child {
+    color: var(--color-brass);
+    margin-bottom: 0.35rem;
+  }
+</style>

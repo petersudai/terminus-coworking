@@ -1,0 +1,275 @@
+---
+const tiers = [
+  {
+    code: "DAY–01",
+    name: "Day Pass",
+    price: "$35",
+    per: "/ day",
+    desc: "One day, full access to the Concourse and Platform. For the worker passing through.",
+    includes: ["Concourse seating", "Wifi & printing", "Platform coffee", "1 guest pass"],
+    featured: false,
+  },
+  {
+    code: "CON–12",
+    name: "Concourse Membership",
+    price: "$325",
+    per: "/ month",
+    desc: "Unlimited access to the Concourse floor, seven days a week.",
+    includes: [
+      "Unlimited Concourse access",
+      "4 hrs Departures / mo",
+      "Mail handling",
+      "Member events & Platform sessions",
+    ],
+    featured: true,
+  },
+  {
+    code: "STU–∞",
+    name: "Studio Membership",
+    price: "from $1,450",
+    per: "/ month",
+    desc: "A lockable private studio for your team, sized two to twelve.",
+    includes: [
+      "Private lockable studio",
+      "Unlimited Departures booking",
+      "Dedicated phone line",
+      "24/7 key access",
+    ],
+    featured: false,
+  },
+];
+---
+
+<section id="membership" class="membership">
+  <div class="membership-head">
+    <p class="eyebrow" data-reveal>Membership</p>
+    <h2 data-reveal>Pick your fare.</h2>
+    <p class="membership-sub" data-reveal>
+      Every membership includes Platform coffee, high-speed fiber, and a
+      key fob that doesn't care what time it is.
+    </p>
+  </div>
+
+  <div class="membership-grid" data-reveal-group>
+    {tiers.map((t) => (
+      <article class={`ticket ${t.featured ? "ticket--featured" : ""}`} data-reveal-item>
+        {t.featured && <span class="ticket-badge">Most booked</span>}
+        <div class="ticket-main">
+          <div class="ticket-row">
+            <span class="eyebrow">Terminus Transit Co.</span>
+            <span class="eyebrow ticket-code">{t.code}</span>
+          </div>
+
+          <h3>{t.name}</h3>
+          <p class="ticket-desc">{t.desc}</p>
+
+          <ul class="ticket-includes">
+            {t.includes.map((i) => <li>{i}</li>)}
+          </ul>
+        </div>
+
+        <div class="ticket-perf" aria-hidden="true"></div>
+
+        <div class="ticket-stub">
+          <div class="ticket-price">
+            <span>{t.price}</span>
+            <span class="ticket-per">{t.per}</span>
+          </div>
+          <a href="#visit" class="ticket-cta" data-cursor-grow data-magnetic>Reserve →</a>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .membership {
+    background: var(--color-bone);
+    color: var(--color-ink);
+    padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .membership-head {
+    max-width: 88rem;
+    margin-inline: auto;
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+  .membership-head .eyebrow {
+    color: var(--color-clay);
+    margin-bottom: 1.25rem;
+  }
+  .membership-head h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    margin-bottom: 1rem;
+  }
+  .membership-sub {
+    max-width: 32rem;
+    color: color-mix(in srgb, var(--color-ink) 70%, transparent);
+    line-height: 1.55;
+  }
+
+  .membership-grid {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .ticket {
+    position: relative;
+    background: var(--color-ink);
+    color: var(--color-bone);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.45);
+  }
+
+  .ticket--featured {
+    outline: 1.5px solid var(--color-clay-bright);
+    outline-offset: -1.5px;
+  }
+
+  .ticket-badge {
+    position: absolute;
+    top: -0.8rem;
+    left: 1.5rem;
+    background: var(--color-clay-bright);
+    color: var(--color-ink);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+  }
+
+  .ticket-main {
+    padding: 1.75rem 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ticket-row {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-steel);
+  }
+  .ticket-code {
+    color: var(--color-brass);
+  }
+
+  .ticket-main h3 {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 400;
+  }
+
+  .ticket-desc {
+    color: color-mix(in srgb, var(--color-bone) 75%, transparent);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .ticket-includes {
+    list-style: none;
+    padding: 0;
+    margin: 0.25rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+  }
+  .ticket-includes li {
+    padding-left: 1.1rem;
+    position: relative;
+    color: color-mix(in srgb, var(--color-bone) 88%, transparent);
+  }
+  .ticket-includes li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-clay-bright);
+  }
+
+  .ticket-perf {
+    position: relative;
+    height: 0;
+    border-top: 1.5px dashed color-mix(in srgb, var(--color-bone) 25%, transparent);
+    margin-inline: 1.75rem;
+  }
+  .ticket-perf::before,
+  .ticket-perf::after {
+    content: "";
+    position: absolute;
+    top: -0.6rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: var(--color-bone);
+    border-radius: 50%;
+  }
+  .ticket-perf::before {
+    left: -2.35rem;
+  }
+  .ticket-perf::after {
+    right: -2.35rem;
+  }
+
+  .ticket-stub {
+    padding: 1.5rem 1.75rem 1.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1rem;
+  }
+
+  .ticket-price {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .ticket-per {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-steel);
+  }
+
+  .ticket-cta {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: var(--color-bone);
+    padding: 0.85rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 420px) {
+    .ticket-price {
+      font-size: 1.9rem;
+    }
+  }
+  .ticket--featured .ticket-cta {
+    background: var(--color-clay-bright);
+    color: var(--color-ink);
+  }
+
+  @media (min-width: 1000px) {
+    .membership-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .ticket--featured {
+      transform: translateY(-0.75rem);
+    }
+  }
+</style>

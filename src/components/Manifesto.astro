@@ -1,0 +1,110 @@
+---
+import { IMAGES, img } from "../data/images";
+---
+
+<section id="manifesto" class="manifesto">
+  <div class="manifesto-inner">
+    <p class="eyebrow manifesto-eyebrow" data-reveal>The Idea</p>
+
+    <p class="manifesto-statement" data-reveal>
+      Atlanta began as a <em>terminus</em> — the last stop on the Western
+      &amp; Atlantic line, the point where rail met road and a city grew up
+      around the crossing. We kept the word for the same reason the city
+      did: it's where different work arrives at the same table.
+    </p>
+
+    <div class="manifesto-grid">
+      <figure class="manifesto-figure" data-reveal>
+        <img
+          src={img(IMAGES.manifestoBrick, 900, 1100)}
+          alt="A wooden work table set against an original exposed-brick wall inside the Terminus building."
+          loading="lazy"
+        />
+        <figcaption class="eyebrow">Fig. 01 — Original brick, Concourse level</figcaption>
+      </figure>
+
+      <div class="manifesto-copy" data-reveal>
+        <p>
+          No two members here are headed the same place. A film editor two
+          desks from a bond attorney, a product team subletting a Studio
+          from a muralist. Terminus doesn't try to make that make sense —
+          it just gives it a good room, strong coffee, and a door that
+          locks when you need it to.
+        </p>
+        <p>
+          The building has done this before. Built in 1921 as a freight
+          depot for the line that gave Atlanta its start, it spent decades
+          moving goods through downtown before it sat empty. We restored
+          the brick, kept the steel trusses, and put desks where the
+          platforms used to be.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .manifesto {
+    background: var(--color-bone);
+    color: var(--color-ink);
+    padding: clamp(5rem, 12vw, 9rem) clamp(1.25rem, 4vw, 3rem);
+  }
+
+  .manifesto-inner {
+    max-width: 68rem;
+    margin-inline: auto;
+  }
+
+  .manifesto-eyebrow {
+    color: var(--color-clay);
+    margin-bottom: 1.5rem;
+  }
+
+  .manifesto-statement {
+    font-family: var(--font-display);
+    font-size: clamp(1.85rem, 4.4vw, 3.4rem);
+    line-height: 1.18;
+    font-weight: 400;
+    max-width: 52rem;
+    margin: 0 0 clamp(3rem, 8vw, 5.5rem);
+  }
+  .manifesto-statement em {
+    font-style: italic;
+    color: var(--color-clay);
+  }
+
+  .manifesto-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .manifesto-figure img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+  .manifesto-figure figcaption {
+    margin-top: 0.75rem;
+    color: var(--color-steel);
+  }
+
+  .manifesto-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    color: color-mix(in srgb, var(--color-ink) 78%, transparent);
+    padding-top: 0.5rem;
+  }
+
+  @media (min-width: 900px) {
+    .manifesto-grid {
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 4rem;
+    }
+  }
+</style>

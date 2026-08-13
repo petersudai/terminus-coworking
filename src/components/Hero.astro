@@ -1,0 +1,200 @@
+---
+import { IMAGES, img } from "../data/images";
+---
+
+<section id="top" class="hero">
+  <div class="hero-media">
+    <img
+      data-hero-img
+      src={img(IMAGES.heroBrick, 2000, 2400)}
+      alt="A restored red-brick depot building in downtown Atlanta, tall windows and a clock face on its facade."
+      class="hero-img"
+    />
+    <div class="hero-scrim"></div>
+  </div>
+
+  <div class="hero-content">
+    <p class="eyebrow hero-eyebrow" data-hero-fade>
+      Downtown Atlanta &nbsp;/&nbsp; Forsyth Street &nbsp;/&nbsp; Est. 2026
+    </p>
+
+    <h1 class="hero-headline">
+      <span class="hero-line-mask"><span data-hero-line class="hero-line">EVERY LINE</span></span>
+      <span class="hero-line-mask"><span data-hero-line class="hero-line hero-line--outline">CONVERGES HERE</span></span>
+    </h1>
+
+    <div class="hero-lower" data-hero-fade>
+      <p class="hero-sub">
+        A members&rsquo; workspace inside a restored 1920s freight depot —
+        downtown&rsquo;s home for people who build things.
+      </p>
+
+      <div class="hero-flap-wrap">
+        <span class="eyebrow hero-flap-label">Now boarding</span>
+        <div class="split-flap hero-flap" data-flap-words="FOCUS|BUILD|GATHER|DEPART|ARRIVE"></div>
+      </div>
+    </div>
+  </div>
+
+  <a href="#manifesto" class="hero-scroll-cue" data-cursor-grow data-hero-fade aria-label="Scroll to next section">
+    <span class="hero-scroll-line"></span>
+    <span>Scroll</span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
+  }
+
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    object-position: center 30%;
+    filter: saturate(0.85) contrast(1.05);
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--color-ink) 55%, transparent) 0%, color-mix(in srgb, var(--color-ink) 40%, transparent) 35%, var(--color-ink) 92%),
+      linear-gradient(90deg, color-mix(in srgb, var(--color-ink) 55%, transparent) 0%, transparent 45%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 88rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .hero-eyebrow {
+    color: var(--color-brass);
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3rem, 10vw, 8.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.75rem;
+  }
+
+  .hero-line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-line {
+    display: block;
+    color: var(--color-bone);
+  }
+
+  .hero-line--outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--color-bone);
+  }
+
+  .hero-lower {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.75rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-bone) 22%, transparent);
+    padding-top: 1.5rem;
+  }
+
+  .hero-sub {
+    max-width: 26rem;
+    font-size: 1.05rem;
+    line-height: 1.55;
+    color: color-mix(in srgb, var(--color-bone) 88%, transparent);
+  }
+
+  .hero-flap-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .hero-flap-label {
+    color: var(--color-steel);
+  }
+
+  .hero-flap {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--color-clay-bright);
+    letter-spacing: 0.08em;
+    background: color-mix(in srgb, var(--color-bone) 6%, transparent);
+    padding: 0.5rem 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--color-bone) 18%, transparent);
+    border-radius: 4px;
+  }
+
+  .hero-scroll-cue {
+    position: absolute;
+    right: clamp(1.5rem, 4vw, 3rem);
+    bottom: clamp(1.5rem, 4vw, 3rem);
+    z-index: 2;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-bone);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  .hero-scroll-line {
+    width: 1px;
+    height: 3.5rem;
+    background: color-mix(in srgb, var(--color-bone) 40%, transparent);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-scroll-line::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--color-clay-bright);
+    animation: scroll-cue 2.2s ease-in-out infinite;
+  }
+  @keyframes scroll-cue {
+    0% { top: -100%; }
+    60% { top: 100%; }
+    100% { top: 100%; }
+  }
+
+  @media (min-width: 700px) {
+    .hero-scroll-cue {
+      display: flex;
+    }
+  }
+</style>

@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Archivo", "Helvetica Neue", sans-serif;
+  --font-mono: "Space Mono", "SFMono-Regular", monospace;
+
+  --color-ink: #17140f;
+  --color-ink-soft: #221d16;
+  --color-bone: #f2ece0;
+  --color-bone-dim: #e5ddcc;
+  --color-clay: #b5502f;
+  --color-clay-bright: #d16a3f;
+  --color-brass: #a8863e;
+  --color-moss: #454f3e;
+  --color-steel: #8d897d;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--color-ink);
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-clay);
+    color: var(--color-bone);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-clay-bright);
+    outline-offset: 3px;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono-label {
+    font-family: var(--font-mono);
+  }
+
+  .text-stroke {
+    -webkit-text-stroke: 1.5px var(--color-bone);
+    color: transparent;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 0.7rem;
+  }
+
+  .grain::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  .reveal-up {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  .split-flap {
+    font-family: var(--font-mono);
+    display: inline-flex;
+    overflow: hidden;
+  }
+
+  .flap-char {
+    display: inline-block;
+    min-width: 0.62em;
+    text-align: center;
+    white-space: pre;
+  }
+
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 32s linear infinite;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+  }
+}

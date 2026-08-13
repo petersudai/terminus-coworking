@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Terminus — A Downtown Atlanta Workspace",
+  description = "Terminus is a members' workspace in the heart of downtown Atlanta — where every line of work converges. Desks, studios, and departure rooms in a restored 1920s brick building on Forsyth Street.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+  </head>
+  <body class="grain">
+    <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+    <div id="lenis-wrapper">
+      <slot />
+    </div>
+
+    <style>
+      .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--color-clay-bright);
+        pointer-events: none;
+        z-index: 200;
+        transform: translate(-50%, -50%);
+        mix-blend-mode: difference;
+        transition:
+          width 0.2s ease,
+          height 0.2s ease,
+          opacity 0.2s ease;
+        opacity: 0;
+      }
+      @media (hover: hover) and (pointer: fine) {
+        .cursor-dot {
+          opacity: 1;
+        }
+      }
+      .cursor-dot.is-active {
+        width: 36px;
+        height: 36px;
+      }
+    </style>
+
+    <script>
+      import "../scripts/main";
+    </script>
+  </body>
+</html>

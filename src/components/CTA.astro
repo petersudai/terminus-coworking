@@ -1,0 +1,173 @@
+---
+import { IMAGES, img } from "../data/images";
+---
+
+<section id="visit" class="cta">
+  <div class="cta-media">
+    <img
+      src={img(IMAGES.ctaStation, 1800, 1400)}
+      alt="A daylit train station concourse, echoing the Terminus building's own architecture."
+      loading="lazy"
+    />
+    <div class="cta-scrim"></div>
+  </div>
+
+  <div class="cta-content">
+    <div class="cta-copy">
+      <p class="eyebrow" data-reveal>Book a Tour</p>
+      <h2 data-reveal>Come see it before you decide.</h2>
+      <p class="cta-sub" data-reveal>
+        Twenty minutes, no pitch deck. We'll walk the Concourse, peek into
+        an open Studio, and get you a guest pass for the Platform on your
+        way out.
+      </p>
+    </div>
+
+    <form class="cta-form" data-reveal data-tour-form>
+      <div class="cta-field">
+        <label for="name">Name</label>
+        <input id="name" name="name" type="text" required autocomplete="name" />
+      </div>
+      <div class="cta-field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" />
+      </div>
+      <div class="cta-field">
+        <label for="interest">Interested in</label>
+        <select id="interest" name="interest">
+          <option>Day Pass</option>
+          <option>Concourse Membership</option>
+          <option>Studio Membership</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <button type="submit" class="cta-submit" data-cursor-grow data-magnetic>
+        Request a tour
+      </button>
+      <p class="cta-form-note" data-tour-note aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    padding: clamp(4rem, 12vw, 8rem) clamp(1.25rem, 4vw, 3rem);
+    overflow: hidden;
+  }
+
+  .cta-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .cta-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.8);
+  }
+  .cta-scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--color-ink) 88%, transparent);
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 1;
+    max-width: 88rem;
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .cta-copy .eyebrow {
+    color: var(--color-brass);
+    margin-bottom: 1.25rem;
+  }
+  .cta-copy h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.25rem, 6vw, 4.25rem);
+    line-height: 1.1;
+    max-width: 22rem;
+    margin-bottom: 1.5rem;
+  }
+  .cta-sub {
+    max-width: 24rem;
+    color: var(--color-steel);
+    line-height: 1.6;
+  }
+
+  .cta-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    background: color-mix(in srgb, var(--color-ink-soft) 92%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-bone) 14%, transparent);
+    border-radius: 8px;
+    padding: 1.75rem;
+    backdrop-filter: blur(6px);
+  }
+
+  .cta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .cta-field label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-steel);
+  }
+  .cta-field input,
+  .cta-field select {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-bone) 25%, transparent);
+    color: var(--color-bone);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding-block: 0.55rem;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+  .cta-field input:focus,
+  .cta-field select:focus {
+    border-color: var(--color-clay-bright);
+  }
+  .cta-field select option {
+    background: var(--color-ink);
+  }
+
+  .cta-submit {
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: var(--color-clay-bright);
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 1.5rem;
+    cursor: pointer;
+  }
+
+  .cta-form-note {
+    font-size: 0.85rem;
+    color: var(--color-brass);
+    min-height: 1.2em;
+  }
+
+  @media (min-width: 900px) {
+    .cta-content {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+</style>
