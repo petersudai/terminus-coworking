@@ -275,7 +275,7 @@ tourForm?.addEventListener("submit", (e) => {
   const note = tourForm.querySelector<HTMLElement>("[data-tour-note]");
   const nameInput = tourForm.querySelector<HTMLInputElement>("#name");
   if (note) {
-    note.textContent = `Thanks${nameInput?.value ? ", " + nameInput.value.split(" ")[0] : ""} — we'll be in touch within a day to set a time.`;
+    note.textContent = `Thanks${nameInput?.value ? ", " + nameInput.value.split(" ")[0] : ""}. We'll be in touch within a day to set a time.`;
   }
   tourForm.reset();
 });
