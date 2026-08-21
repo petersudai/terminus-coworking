@@ -12,9 +12,10 @@ const {
   description = "Terminus is a members' workspace in the heart of downtown Atlanta, where every line of work converges. Desks, studios, and departure rooms in a restored 1920s brick building on Forsyth Street.",
 } = Astro.props;
 
-// Swap for the deployed domain once it's live so social crawlers get an
-// absolute og:image URL — relative paths aren't reliable across platforms.
-const ogImage = "/og-image.png";
+// Social crawlers need an absolute og:image URL — built from `site` in
+// astro.config.mjs rather than a relative path.
+const ogImage = new URL("/og-image.png", Astro.site).href;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -25,8 +26,10 @@ const ogImage = "/og-image.png";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <link rel="canonical" href={canonicalUrl} />
 
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={ogImage} />
