@@ -54,28 +54,30 @@ const tiers = [
     {tiers.map((t) => (
       <article class={`ticket ${t.featured ? "ticket--featured" : ""}`} data-reveal-item>
         {t.featured && <span class="ticket-badge">Most booked</span>}
-        <div class="ticket-main">
-          <div class="ticket-row">
-            <span class="eyebrow">Terminus Transit Co.</span>
-            <span class="eyebrow ticket-code">{t.code}</span>
+        <div class="ticket-tilt" data-tilt>
+          <div class="ticket-main">
+            <div class="ticket-row">
+              <span class="eyebrow">Terminus Transit Co.</span>
+              <span class="eyebrow ticket-code">{t.code}</span>
+            </div>
+
+            <h3>{t.name}</h3>
+            <p class="ticket-desc">{t.desc}</p>
+
+            <ul class="ticket-includes">
+              {t.includes.map((i) => <li>{i}</li>)}
+            </ul>
           </div>
 
-          <h3>{t.name}</h3>
-          <p class="ticket-desc">{t.desc}</p>
+          <div class="ticket-perf" aria-hidden="true"></div>
 
-          <ul class="ticket-includes">
-            {t.includes.map((i) => <li>{i}</li>)}
-          </ul>
-        </div>
-
-        <div class="ticket-perf" aria-hidden="true"></div>
-
-        <div class="ticket-stub">
-          <div class="ticket-price">
-            <span>{t.price}</span>
-            <span class="ticket-per">{t.per}</span>
+          <div class="ticket-stub">
+            <div class="ticket-price">
+              <span>{t.price}</span>
+              <span class="ticket-per">{t.per}</span>
+            </div>
+            <a href="#visit" class="ticket-cta" data-cursor-label="Book" data-magnetic>Reserve →</a>
           </div>
-          <a href="#visit" class="ticket-cta" data-cursor-grow data-magnetic>Reserve →</a>
         </div>
       </article>
     ))}
@@ -123,14 +125,21 @@ const tiers = [
     background: var(--color-ink);
     color: var(--color-bone);
     border-radius: 6px;
-    display: flex;
-    flex-direction: column;
     box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.45);
+    perspective: 900px;
   }
 
   .ticket--featured {
     outline: 1.5px solid var(--color-clay-bright);
     outline-offset: -1.5px;
+  }
+
+  .ticket-tilt {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border-radius: inherit;
+    will-change: transform;
   }
 
   .ticket-badge {

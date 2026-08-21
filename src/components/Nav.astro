@@ -118,13 +118,28 @@ const links = [
     letter-spacing: 0.08em;
   }
   .nav-links a {
+    position: relative;
     color: var(--color-bone);
     text-decoration: none;
     opacity: 0.75;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, color 0.2s ease;
   }
   .nav-links a:hover {
     opacity: 1;
+  }
+  .nav-links a.is-active {
+    opacity: 1;
+    color: var(--color-clay-bright);
+  }
+  .nav-links a.is-active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.6rem;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--color-clay-bright);
   }
 
   .nav-cta {

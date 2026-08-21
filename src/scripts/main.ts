@@ -9,16 +9,17 @@ const prefersReducedMotion = window.matchMedia(
 ).matches;
 
 /* ---------- Smooth scroll (Lenis <-> GSAP ticker) ---------- */
+let lenisInstance: Lenis | null = null;
 if (!prefersReducedMotion) {
-  const lenis = new Lenis({
+  lenisInstance = new Lenis({
     duration: 1.1,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
   });
 
-  lenis.on("scroll", ScrollTrigger.update);
+  lenisInstance.on("scroll", ScrollTrigger.update);
 
   gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
+    lenisInstance?.raf(time * 1000);
   });
   gsap.ticker.lagSmoothing(0);
 }
@@ -28,7 +29,7 @@ if (!prefersReducedMotion) {
 window.addEventListener("load", () => ScrollTrigger.refresh());
 document.fonts?.ready.then(() => ScrollTrigger.refresh());
 
-/* ---------- Nav: shrink on scroll + fullscreen overlay ---------- */
+/* ---------- Nav: shrink on scroll, active section, fullscreen overlay ---------- */
 const nav = document.querySelector<HTMLElement>("[data-nav]");
 const navToggle = document.querySelector<HTMLElement>("[data-nav-toggle]");
 const navOverlay = document.querySelector<HTMLElement>("[data-nav-overlay]");
@@ -58,15 +59,47 @@ document.querySelectorAll<HTMLElement>("[data-nav-overlay] a").forEach((a) => {
   });
 });
 
-/* ---------- Custom cursor ---------- */
+const navLinks = Array.from(
+  document.querySelectorAll<HTMLAnchorElement>(".nav-links a"),
+);
+const navSections = navLinks
+  .map((a) => document.querySelector<HTMLElement>(a.getAttribute("href") ?? ""))
+  .filter((el): el is HTMLElement => Boolean(el));
+
+if (navLinks.length && navSections.length) {
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const link = navLinks.find((a) => a.getAttribute("href") === `#${entry.target.id}`);
+        link?.classList.toggle("is-active", entry.isIntersecting);
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px" },
+  );
+  navSections.forEach((section) => sectionObserver.observe(section));
+}
+
+/* ---------- Custom cursor (grow dot + text label) ---------- */
 const cursorDot = document.getElementById("cursor-dot");
+const cursorLabel = cursorDot?.querySelector<HTMLElement>(".cursor-dot-label") ?? null;
+
 if (cursorDot && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
   window.addEventListener("mousemove", (e) => {
     gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.15, ease: "power2.out" });
   });
+
   document.querySelectorAll<HTMLElement>("[data-cursor-grow]").forEach((el) => {
     el.addEventListener("mouseenter", () => cursorDot.classList.add("is-active"));
     el.addEventListener("mouseleave", () => cursorDot.classList.remove("is-active"));
+  });
+
+  document.querySelectorAll<HTMLElement>("[data-cursor-label]").forEach((el) => {
+    const text = el.dataset.cursorLabel ?? "";
+    el.addEventListener("mouseenter", () => {
+      if (cursorLabel) cursorLabel.textContent = text;
+      cursorDot.classList.add("has-label");
+    });
+    el.addEventListener("mouseleave", () => cursorDot.classList.remove("has-label"));
   });
 }
 
@@ -81,6 +114,28 @@ if (!prefersReducedMotion) {
     });
     el.addEventListener("mouseleave", () => {
       gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
+    });
+  });
+}
+
+/* ---------- Tilt-on-hover (membership tickets) ---------- */
+if (!prefersReducedMotion) {
+  document.querySelectorAll<HTMLElement>("[data-tilt]").forEach((el) => {
+    const max = 7;
+    el.addEventListener("mousemove", (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(el, {
+        rotateX: py * -max,
+        rotateY: px * max,
+        transformPerspective: 900,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    });
+    el.addEventListener("mouseleave", () => {
+      gsap.to(el, { rotateX: 0, rotateY: 0, duration: 0.6, ease: "elastic.out(1, 0.5)" });
     });
   });
 }
@@ -130,7 +185,7 @@ document.querySelectorAll<HTMLElement>("[data-reveal-group]").forEach((group) =>
   );
 });
 
-/* ---------- Hero parallax + intro ---------- */
+/* ---------- Hero parallax ---------- */
 const heroImg = document.querySelector<HTMLElement>("[data-hero-img]");
 if (heroImg && !prefersReducedMotion) {
   gsap.to(heroImg, {
@@ -145,18 +200,23 @@ if (heroImg && !prefersReducedMotion) {
   });
 }
 
-gsap.timeline({ delay: 0.15 })
-  .from("[data-hero-line]", {
-    yPercent: 110,
-    duration: 1.1,
-    stagger: 0.1,
-    ease: "power4.out",
-  })
-  .from(
-    "[data-hero-fade]",
-    { opacity: 0, y: 16, duration: 0.8, ease: "power2.out", stagger: 0.08 },
-    "-=0.6",
-  );
+/* ---------- Hero intro (runs once the preloader clears) ---------- */
+function runHeroIntro() {
+  if (prefersReducedMotion) return;
+  gsap
+    .timeline()
+    .from("[data-hero-line]", {
+      yPercent: 110,
+      duration: 1.1,
+      stagger: 0.1,
+      ease: "power4.out",
+    })
+    .from(
+      "[data-hero-fade]",
+      { opacity: 0, y: 16, duration: 0.8, ease: "power2.out", stagger: 0.08 },
+      "-=0.6",
+    );
+}
 
 /* ---------- Split-flap board ---------- */
 const FLAP_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ .,'-".split("");
@@ -194,7 +254,7 @@ function buildFlapBoard(el: HTMLElement, text: string) {
   chars.forEach((c) => {
     const span = document.createElement("span");
     span.className = "flap-char";
-    span.textContent = c === " " ? " " : c;
+    span.textContent = c === " " ? " " : c;
     el.appendChild(span);
   });
   return el.querySelectorAll<HTMLElement>(".flap-char");
@@ -210,7 +270,7 @@ document.querySelectorAll<HTMLElement>("[data-flap-words]").forEach((board) => {
     const padded = word.padEnd(width, " ");
     const spans = buildFlapBoard(board, padded);
     spans.forEach((span, i) => {
-      flapTo(span, padded[i] === " " ? " " : padded[i], i * 35);
+      flapTo(span, padded[i] === " " ? " " : padded[i], i * 35);
     });
   }
 
@@ -228,7 +288,7 @@ document.querySelectorAll<HTMLElement>("[data-flap-words]").forEach((board) => {
 document.querySelectorAll<HTMLElement>("[data-flap-once]").forEach((board) => {
   const text = board.dataset.flapOnce ?? "";
   const spans = buildFlapBoard(board, text);
-  spans.forEach((span) => (span.textContent = " "));
+  spans.forEach((span) => (span.textContent = " "));
 
   ScrollTrigger.create({
     trigger: board,
@@ -236,11 +296,50 @@ document.querySelectorAll<HTMLElement>("[data-flap-once]").forEach((board) => {
     once: true,
     onEnter: () => {
       spans.forEach((span, i) => {
-        flapTo(span, text[i] === " " ? " " : text[i], i * 30);
+        flapTo(span, text[i] === " " ? " " : text[i], i * 30);
       });
     },
   });
 });
+
+/* ---------- Preloader ---------- */
+const preloader = document.getElementById("preloader");
+
+function unlockScroll() {
+  document.documentElement.classList.remove("is-locked");
+  lenisInstance?.start();
+}
+
+function finishPreload() {
+  if (!preloader) return;
+  preloader.classList.add("is-done");
+  unlockScroll();
+  runHeroIntro();
+  window.setTimeout(() => preloader.remove(), 900);
+}
+
+if (preloader) {
+  document.documentElement.classList.add("is-locked");
+  lenisInstance?.stop();
+
+  if (prefersReducedMotion) {
+    finishPreload();
+  } else {
+    const flapEl = preloader.querySelector<HTMLElement>("[data-flap-preload]");
+    const word = flapEl?.dataset.flapPreload ?? "";
+    if (flapEl && word) {
+      const spans = buildFlapBoard(flapEl, word);
+      const perCharDelay = 70;
+      spans.forEach((span, i) => flapTo(span, word[i], 260 + i * perCharDelay));
+      const totalTime = 260 + word.length * perCharDelay + 480 + 500;
+      window.setTimeout(finishPreload, totalTime);
+    } else {
+      window.setTimeout(finishPreload, 600);
+    }
+  }
+} else {
+  runHeroIntro();
+}
 
 /* ---------- Horizontal gallery scroll ---------- */
 const track = document.querySelector<HTMLElement>("[data-h-track]");

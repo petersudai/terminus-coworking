@@ -10,6 +10,10 @@ const {
   title = "Terminus: A Downtown Atlanta Workspace",
   description = "Terminus is a members' workspace in the heart of downtown Atlanta, where every line of work converges. Desks, studios, and departure rooms in a restored 1920s brick building on Forsyth Street.",
 } = Astro.props;
+
+// Swap for the deployed domain once it's live so social crawlers get an
+// absolute og:image URL — relative paths aren't reliable across platforms.
+const ogImage = "/og-image.png";
 ---
 
 <!doctype html>
@@ -20,12 +24,32 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={description} />
     <title>{title}</title>
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
   </head>
   <body class="grain">
-    <div id="cursor-dot" class="cursor-dot" aria-hidden="true"></div>
+    <div id="preloader" class="preloader">
+      <div class="preloader-inner">
+        <span class="eyebrow preloader-eyebrow">Downtown Atlanta</span>
+        <div class="split-flap preloader-flap" data-flap-preload="TERMINUS"></div>
+      </div>
+    </div>
+
+    <div id="cursor-dot" class="cursor-dot" aria-hidden="true">
+      <span class="cursor-dot-label"></span>
+    </div>
+
     <div id="lenis-wrapper">
       <slot />
     </div>
@@ -43,10 +67,14 @@ const {
         z-index: 200;
         transform: translate(-50%, -50%);
         mix-blend-mode: difference;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         transition:
           width 0.2s ease,
           height 0.2s ease,
-          opacity 0.2s ease;
+          opacity 0.2s ease,
+          background-color 0.2s ease;
         opacity: 0;
       }
       @media (hover: hover) and (pointer: fine) {
@@ -57,6 +85,71 @@ const {
       .cursor-dot.is-active {
         width: 36px;
         height: 36px;
+      }
+      .cursor-dot-label {
+        opacity: 0;
+        font-family: var(--font-mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--color-ink);
+        white-space: nowrap;
+        transition: opacity 0.15s ease;
+      }
+      .cursor-dot.has-label {
+        width: auto;
+        height: auto;
+        padding: 0.55rem 1rem;
+        border-radius: 999px;
+        background: var(--color-bone);
+        mix-blend-mode: normal;
+      }
+      .cursor-dot.has-label .cursor-dot-label {
+        opacity: 1;
+      }
+
+      html.is-locked,
+      html.is-locked body {
+        overflow: hidden;
+        height: 100%;
+      }
+
+      .preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        background: var(--color-ink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s cubic-bezier(0.83, 0, 0.17, 1);
+      }
+      .preloader.is-done {
+        opacity: 0;
+        transform: translateY(-4%);
+        pointer-events: none;
+      }
+      .preloader-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .preloader-eyebrow {
+        color: var(--color-steel);
+      }
+      .preloader-flap {
+        font-size: clamp(2rem, 8vw, 4rem);
+        color: var(--color-bone);
+        letter-spacing: 0.06em;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .preloader {
+          transition: none;
+        }
       }
     </style>
 
