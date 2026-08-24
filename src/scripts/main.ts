@@ -359,12 +359,15 @@ if (track && !prefersReducedMotion) {
   });
 }
 
-/* ---------- Marquee (CSS driven, JS just clones content) ---------- */
+/* ---------- Marquee (CSS driven, JS doubles the track's own children
+   in place so the loop is seamless — cloning the track itself as a
+   sibling would render two independent, identically-animated rows) ---------- */
 document.querySelectorAll<HTMLElement>("[data-marquee]").forEach((el) => {
-  const inner = el.firstElementChild;
-  if (inner) {
-    el.appendChild(inner.cloneNode(true));
-  }
+  const track = el.firstElementChild;
+  if (!track) return;
+  Array.from(track.children).forEach((card) => {
+    track.appendChild(card.cloneNode(true));
+  });
 });
 
 /* ---------- Tour request form (front-end only demo) ---------- */
