@@ -58,6 +58,13 @@ const frames = [
 
 <style>
   .building {
+    /* Explicit width matters here: GSAP pins this section with
+       position: fixed while the gallery scrolls, and a fixed box with
+       no declared width shrink-wraps to its widest descendant — which
+       is the width: max-content horizontal track. Without this, the
+       whole page grows as wide as the (deliberately oversized) track
+       the moment the pin engages. */
+    width: 100%;
     background: var(--color-ink);
     padding-top: clamp(4rem, 10vw, 7rem);
   }
