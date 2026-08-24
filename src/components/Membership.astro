@@ -278,7 +278,9 @@ const tiers = [
       grid-template-columns: repeat(3, 1fr);
     }
     .ticket--featured {
-      transform: translateY(-0.75rem);
+      /* margin, not transform — the reveal animation drives this element's
+         transform via GSAP, which would otherwise overwrite a CSS translateY */
+      margin-top: -0.75rem;
     }
   }
 </style>
