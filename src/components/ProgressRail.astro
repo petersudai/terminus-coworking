@@ -1,0 +1,171 @@
+---
+import { SECTIONS } from "../data/sections";
+---
+
+<nav class="rail" data-rail aria-label="Page progress">
+  <a href="#top" class="rail-cap" data-cursor-grow aria-label="Back to the top">
+    <span class="rail-cap-dot"></span>
+  </a>
+
+  <div class="rail-track" data-rail-track>
+    <span class="rail-line" aria-hidden="true"></span>
+    <span class="rail-marker" data-rail-marker aria-hidden="true"></span>
+
+    {SECTIONS.map((s) => (
+      <a
+        href={s.href}
+        class="rail-tick"
+        data-rail-tick
+        data-cursor-grow
+        aria-label={`Jump to ${s.label}`}
+      >
+        <span class="rail-tick-mark" aria-hidden="true"></span>
+        <span class="rail-tick-label eyebrow">{s.label}</span>
+      </a>
+    ))}
+  </div>
+
+  <a href="#visit" class="rail-cap" data-cursor-grow aria-label="Jump to Book a Tour">
+    <span class="rail-cap-dot"></span>
+  </a>
+</nav>
+
+<style>
+  .rail {
+    position: fixed;
+    top: 6.5rem;
+    bottom: 2.25rem;
+    right: clamp(1.5rem, 3vw, 2.75rem);
+    z-index: 40;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  @media (min-width: 1100px) {
+    .rail {
+      display: flex;
+    }
+  }
+
+  .rail-cap {
+    pointer-events: auto;
+    padding: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rail-cap-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-bone);
+    mix-blend-mode: difference;
+  }
+
+  .rail-track {
+    position: relative;
+    flex: 1;
+    width: 1px;
+    margin-block: 0.25rem;
+  }
+
+  .rail-line {
+    /* Full opacity, no transparency: mix-blend-mode:difference already
+       gives adaptive contrast (dark line on bone sections, light line on
+       ink sections) on its own — layering opacity on top waters the
+       darker result back down and makes the line nearly vanish on the
+       lighter sections. */
+    position: absolute;
+    inset: 0;
+    width: 1px;
+    background: var(--color-bone);
+    mix-blend-mode: difference;
+  }
+
+  .rail-marker {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-clay-bright);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-clay-bright) 22%, transparent);
+  }
+
+  .rail-tick {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    padding: 0.6rem;
+    text-decoration: none;
+  }
+
+  .rail-tick-mark {
+    width: 9px;
+    height: 1px;
+    background: var(--color-bone);
+    mix-blend-mode: difference;
+    transition:
+      width 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .rail-tick-label {
+    position: absolute;
+    right: 100%;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+    color: var(--color-bone);
+    mix-blend-mode: difference;
+    opacity: 0;
+    transform: translateX(6px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .rail-tick:hover .rail-tick-label,
+  .rail-tick:focus-visible .rail-tick-label,
+  .rail-tick.is-active .rail-tick-label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .rail-tick.is-active .rail-tick-mark {
+    width: 16px;
+    background: var(--color-clay-bright);
+    mix-blend-mode: normal;
+  }
+
+  /* Explicit ink coloring while a light-background section is centered
+     in view — see the updateRailTheme() comment in main.ts for why this
+     doesn't lean on mix-blend-mode instead. */
+  .rail.is-light .rail-line,
+  .rail.is-light .rail-cap-dot,
+  .rail.is-light .rail-tick-mark {
+    background: var(--color-ink);
+    mix-blend-mode: normal;
+  }
+  .rail.is-light .rail-tick-label {
+    color: var(--color-ink);
+    mix-blend-mode: normal;
+  }
+  .rail.is-light .rail-tick.is-active .rail-tick-mark {
+    background: var(--color-clay-bright);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail-marker {
+      transition: none;
+    }
+  }
+</style>

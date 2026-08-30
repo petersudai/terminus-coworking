@@ -35,6 +35,14 @@
     overflow-x: clip;
   }
 
+  /* GSAP's auto-generated pin-spacer (for the pinned Building gallery)
+     measures the section's *content* width rather than its CSS-constrained
+     one and bakes the oversized number in as an inline style — cap it so
+     it can't stretch the whole page. */
+  .pin-spacer {
+    max-width: 100% !important;
+  }
+
   ::selection {
     background: var(--color-clay);
     color: var(--color-bone);

@@ -59,24 +59,107 @@ document.querySelectorAll<HTMLElement>("[data-nav-overlay] a").forEach((a) => {
   });
 });
 
-const navLinks = Array.from(
-  document.querySelectorAll<HTMLAnchorElement>(".nav-links a"),
+// Nav links and the progress rail's ticks point at the same sections, so
+// one observer drives the "active" state on both.
+const sectionLinks = Array.from(
+  document.querySelectorAll<HTMLAnchorElement>(".nav-links a, [data-rail-tick]"),
 );
-const navSections = navLinks
-  .map((a) => document.querySelector<HTMLElement>(a.getAttribute("href") ?? ""))
+const sectionTargets = Array.from(
+  new Set(sectionLinks.map((a) => a.getAttribute("href")).filter((h): h is string => Boolean(h))),
+)
+  .map((href) => document.querySelector<HTMLElement>(href))
   .filter((el): el is HTMLElement => Boolean(el));
 
-if (navLinks.length && navSections.length) {
+if (sectionLinks.length && sectionTargets.length) {
   const sectionObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        const link = navLinks.find((a) => a.getAttribute("href") === `#${entry.target.id}`);
-        link?.classList.toggle("is-active", entry.isIntersecting);
+        const href = `#${entry.target.id}`;
+        sectionLinks
+          .filter((a) => a.getAttribute("href") === href)
+          .forEach((a) => a.classList.toggle("is-active", entry.isIntersecting));
       });
     },
     { rootMargin: "-45% 0px -45% 0px" },
   );
-  navSections.forEach((section) => sectionObserver.observe(section));
+  sectionTargets.forEach((section) => sectionObserver.observe(section));
+}
+
+/* ---------- Progress rail: scroll marker + measured tick placement ---------- */
+const rail = document.querySelector<HTMLElement>("[data-rail]");
+const railTrack = rail?.querySelector<HTMLElement>("[data-rail-track]") ?? null;
+const railMarker = rail?.querySelector<HTMLElement>("[data-rail-marker]") ?? null;
+const railTicks = rail
+  ? Array.from(rail.querySelectorAll<HTMLAnchorElement>("[data-rail-tick]"))
+  : [];
+
+function maxScrollY() {
+  return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+}
+
+function layoutRailTicks() {
+  if (!railTrack) return;
+  const max = maxScrollY();
+  railTicks.forEach((tick) => {
+    const href = tick.getAttribute("href");
+    const target = href ? document.querySelector<HTMLElement>(href) : null;
+    if (!target) return;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    const pct = Math.min(1, Math.max(0, targetTop / max));
+    tick.style.top = `${pct * 100}%`;
+  });
+}
+
+function updateRailMarker() {
+  if (!railMarker) return;
+  const pct = Math.min(1, Math.max(0, window.scrollY / maxScrollY()));
+  railMarker.style.top = `${pct * 100}%`;
+}
+
+// mix-blend-mode is unreliable on this element (it sits inside a fixed,
+// deeply-nested, high-z-index box, and blending against the real page
+// backdrop across that many compositing layers isn't consistent across
+// browsers) — so instead of leaning on blend tricks, explicitly track
+// which sections are light-background and swap the rail to solid ink
+// coloring for as long as one of them is centered in view.
+const lightSections = Array.from(document.querySelectorAll<HTMLElement>("[data-bg-light]"));
+
+function updateRailTheme() {
+  if (!rail) return;
+  const probeY = window.innerHeight / 2;
+  const overLight = lightSections.some((el) => {
+    const r = el.getBoundingClientRect();
+    return r.top <= probeY && r.bottom >= probeY;
+  });
+  rail.classList.toggle("is-light", overLight);
+}
+
+function updateRail() {
+  updateRailMarker();
+  updateRailTheme();
+}
+
+if (rail) {
+  layoutRailTicks();
+  updateRail();
+  window.addEventListener("resize", () => {
+    layoutRailTicks();
+    updateRail();
+  });
+  window.addEventListener("load", () => {
+    layoutRailTicks();
+    updateRail();
+  });
+  document.fonts?.ready.then(() => {
+    layoutRailTicks();
+    updateRail();
+  });
+
+  if (lenisInstance) {
+    lenisInstance.on("scroll", updateRail);
+  } else {
+    window.addEventListener("scroll", updateRail, { passive: true });
+  }
 }
 
 /* ---------- Custom cursor (grow dot + text label) ---------- */
@@ -315,6 +398,8 @@ function finishPreload() {
   preloader.classList.add("is-done");
   unlockScroll();
   runHeroIntro();
+  layoutRailTicks();
+  updateRail();
   window.setTimeout(() => preloader.remove(), 900);
 }
 
