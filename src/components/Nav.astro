@@ -115,17 +115,44 @@ const links = SECTIONS;
   }
   .nav-links a {
     position: relative;
+    display: inline-block;
+    padding-block: 0.3rem;
     color: var(--color-bone);
     text-decoration: none;
-    opacity: 0.75;
-    transition: opacity 0.2s ease, color 0.2s ease;
+    opacity: 0.7;
+    transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
   }
-  .nav-links a:hover {
+  /* Hover/focus draws a bone underline in from the left — a preview,
+     separate from the solid clay-bright bar that marks the section
+     actually in view, so the two states never read as the same thing. */
+  .nav-links a::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.6rem;
+    height: 1.5px;
+    border-radius: 999px;
+    background: var(--color-bone);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
     opacity: 1;
+    transform: translateY(-1px);
+  }
+  .nav-links a:hover::before,
+  .nav-links a:focus-visible::before {
+    transform: scaleX(1);
   }
   .nav-links a.is-active {
     opacity: 1;
     color: var(--color-clay-bright);
+  }
+  .nav-links a.is-active::before {
+    transform: scaleX(0);
   }
   .nav-links a.is-active::after {
     content: "";
@@ -149,6 +176,15 @@ const links = SECTIONS;
     padding: 0.7rem 1.3rem;
     border-radius: 999px;
     text-decoration: none;
+    /* transform is intentionally left out here — data-magnetic already
+       drives it via GSAP on every mousemove frame, and a CSS transition
+       on the same property would fight that instead of complementing it. */
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .nav-cta:hover,
+  .nav-cta:focus-visible {
+    background: var(--color-clay-bright);
+    box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--color-clay-bright) 60%, transparent);
   }
 
   .nav-toggle {
