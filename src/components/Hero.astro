@@ -80,8 +80,18 @@ import { IMAGES, img } from "../data/images";
   }
 
   .hero-eyebrow {
+    /* What's directly behind this (brick vs. bright sky) shifts across
+       breakpoints, so a plain text color can't guarantee contrast — a
+       translucent backdrop chip does, regardless of the crop. Same
+       language as the nav's scrolled state and the ticket badges. */
+    display: inline-block;
     color: var(--color-brass);
     margin-bottom: 1.25rem;
+    background: color-mix(in srgb, var(--color-ink) 62%, transparent);
+    backdrop-filter: blur(6px);
+    padding: 0.45rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-bone) 12%, transparent);
   }
 
   .hero-headline {
